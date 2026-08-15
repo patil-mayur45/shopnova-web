@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { FiHeart, FiShoppingCart, FiStar } from "react-icons/fi";
+import { FiHeart, FiShoppingCart, FiStar, FiZap } from "react-icons/fi";
 import { addToCart, selectIsInCart } from "../features/cart/cartSlice";
 import { toggleWishlist, selectIsWishlisted } from "../features/wishlist/wishlistSlice";
 
@@ -62,17 +62,31 @@ export default function ProductCard({ product }) {
           </span>
         </div>
 
-        <button
-          onClick={() => (inCart ? navigate("/cart") : dispatch(addToCart(product)))}
-          className={`mt-3 flex items-center justify-center gap-2 text-sm font-600 py-2 rounded-full transition-colors ${
-            inCart
-              ? "bg-primary/10 text-primary"
-              : "bg-primary text-cream hover:bg-primary-dark"
-          }`}
-        >
-          <FiShoppingCart size={16} />
-          {inCart ? "Go to Cart" : "Add to Cart"}
-        </button>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <button
+            onClick={() => (inCart ? navigate("/cart") : dispatch(addToCart(product)))}
+            className={`flex items-center justify-center gap-1 text-xs sm:text-sm font-600 py-2 rounded-full transition-colors ${
+              inCart
+                ? "bg-primary/10 text-primary"
+                : "bg-primary text-cream hover:bg-primary-dark"
+            }`}
+          >
+            <FiShoppingCart size={16} />
+            {inCart ? "Go to Cart" : "Add to Cart"}
+          </button>
+
+          <button
+            onClick={() => {
+              // Buy Now: make sure it's in the cart, then jump straight to checkout
+              if (!inCart) dispatch(addToCart(product));
+              navigate("/cart");
+            }}
+            className="flex items-center justify-center gap-1 text-xs sm:text-sm font-600 py-2 rounded-full bg-accent text-primary-dark hover:bg-accent-light transition-colors"
+          >
+            <FiZap size={16} />
+            Buy Now
+          </button>
+        </div>
       </div>
     </div>
   );
